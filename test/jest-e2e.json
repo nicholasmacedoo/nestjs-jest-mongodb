@@ -3,7 +3,7 @@
   "rootDir": "../src",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
-  "verboso": true,
+  "verbose": true,
   "setupFilesAfterEnv": [
       "../test/setup-tests.ts"
     ],
