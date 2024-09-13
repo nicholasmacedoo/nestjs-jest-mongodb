@@ -4,6 +4,7 @@ import { AppModule } from '../app.module';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { PrismaService } from '../infra/prisma/prisma.service';
+import 'dotenv/config';
 
 describe('Users', () => {
   let app: INestApplication;
@@ -26,6 +27,7 @@ describe('Users', () => {
   });
 
   describe('CREATE USER', () => {
+    console.log(process.env.DATABASE_URL);
     test('[POST] /users : should be to create a user', async () => {
       const response = await request(app.getHttpServer())
         .post('/users')
@@ -42,31 +44,31 @@ describe('Users', () => {
 
       expect(response.statusCode).toBe(400);
     });
-
-    describe('DELETE USER', () => {
-      test('[DELETE] /users - should be delete a user', async () => {
-        const userForDelete = await prisma.user.create({
-          data: {
-            email: 'remove@test.com.br',
-            name: 'Teste',
-          },
-        });
-        const response = await request(app.getHttpServer())
-          .delete(`/users/${userForDelete.id}`)
-          .send();
-
-        expect(response.statusCode).toBe(200);
+  });
+  describe('DELETE USER', () => {
+    test('[DELETE] /users - should be delete a user', async () => {
+      const userForDelete = await prisma.user.create({
+        data: {
+          email: 'remove@test.com.br',
+          name: 'Teste',
+        },
       });
 
-      test('[DELETE] /users - should not be possible to delete a user if not exists', async () => {
-        const exampleObjectId = '64e1f4f73f20f1a9c2b0b9e1';
+      const response = await request(app.getHttpServer())
+        .delete(`/users/${userForDelete.id}`)
+        .send();
 
-        const response = await request(app.getHttpServer())
-          .delete(`/users/${exampleObjectId}`)
-          .send();
+      expect(response.statusCode).toBe(200);
+    });
 
-        expect(response.statusCode).toBe(400);
-      });
+    test('[DELETE] /users - should not be possible to delete a user if not exists', async () => {
+      const exampleObjectId = '64e1f4f73f20f1a9c2b0b9e1';
+
+      const response = await request(app.getHttpServer())
+        .delete(`/users/${exampleObjectId}`)
+        .send();
+
+      expect(response.statusCode).toBe(400);
     });
   });
 });
