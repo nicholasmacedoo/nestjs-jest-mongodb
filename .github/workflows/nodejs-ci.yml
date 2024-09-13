@@ -3,7 +3,7 @@ name: Rodar os testes de integrações
 on:
   push:
     branches:
-      - master
+      - mongodb-memory-server
   pull_request:
     branches:
       - master
