@@ -34,9 +34,9 @@ jobs:
             ${{ runner.os }}-node_modules-
 
       # Step 4: Install dependencies
-      - name: Install dependencies
+      - name: Intalando as dependências
         run: npm install
 
       # Step 5: Run tests
-      - name: Run tests
-        run: npm test:e2e
+      - name: Rodar os testes
+        run: npm run test:e2e
