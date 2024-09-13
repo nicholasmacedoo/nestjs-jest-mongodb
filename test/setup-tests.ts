@@ -1,5 +1,5 @@
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
-// import { execSync } from 'node:child_process';
+import { execSync } from 'node:child_process';
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 
@@ -12,8 +12,8 @@ beforeAll(async () => {
   const uri = mongod.getUri('tests');
 
   process.env.DATABASE_URL = uri;
-  // execSync(`set DATABASE_URL=${uri}`, { stdio: 'inherit' });
-  // execSync('npx prisma db push');
+  execSync(`set DATABASE_URL=${uri}`, { stdio: 'inherit' });
+  execSync('npx prisma db push');
 });
 
 afterAll(async () => {
