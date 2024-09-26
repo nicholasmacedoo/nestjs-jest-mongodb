@@ -3,30 +3,38 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 import { PrismaService } from '../infra/prisma/prisma.service';
+import { hash } from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: CreateUserDto) {
+  async create({ email, name, password }: CreateUserDto) {
     const userExists = await this.prisma.user.findFirst({
       where: {
-        email: data.email,
+        email,
       },
     });
 
     if (userExists)
       throw new BadRequestException('User with email already exists');
 
+    const hashedPassword = await hash(password, 8);
+
     const user = await this.prisma.user.create({
-      data,
+      data: {
+        email,
+        name,
+        role: 'BASIC',
+        password: hashedPassword,
+      },
     });
 
     return user;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    return this.prisma.user.findMany();
   }
 
   async findOne(id: string) {
